@@ -3,6 +3,8 @@ from EMS.EMS_recovery import EMS_recovery
 from EMS.utilities import read_ply, showPoints
 from mayavi import mlab
 from sklearn.cluster import DBSCAN
+from pkl2ply import read_pkl
+
 
 def hierarchical_ems(
     point,
@@ -59,12 +61,27 @@ def hierarchical_ems(
 
 
 # Load pointcloud 
-point_cloud = read_ply("/home/stanz/EMS_superquadric/EMS-superquadric_fitting/MATLAB/example_scripts/data/multi_superquadrics/dog.ply")
+#point_cloud = read_ply("/home/hamilton/Master_thesis/data202411171451/external/conceptgraphs_short/exps/r_mapping_stride6_short/pcd_r_mapping_stride6_short.pkl")
+
+pkl_path = "/home/hamilton/Master_thesis/data202411171451/external/conceptgraphs_short/exps/r_mapping_stride6_short/pcd_r_mapping_stride6_short.pkl"
+ply_path = "output_file.ply"
+
+#pkl2ply(pkl_path, ply_path)
+
+#point_cloud = read_ply(ply_path)
+point_cloud = read_pkl(pkl_path)
+
+
+
+
 point_seg, point_outlier, list_quadrics = hierarchical_ems(point_cloud)
+
+
+
 
 # -----------    Plot multiquadric figure --------------
 fig = mlab.figure(size=(400, 400), bgcolor=(1, 1, 1))
 for quadric in list_quadrics:
     quadric.showSuperquadric(arclength=0.2)
-showPoints(point_cloud, scale_factor=0.001)
+showPoints(point_cloud, scale_factor=0.01)
 mlab.show()
